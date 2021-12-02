@@ -4,12 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
-
     <application
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="MoviesApp ${variant}"
+        android:label="${variant} MoviesApp"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieApp">
@@ -17,11 +16,11 @@
             android:name=".ui.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
-            android:label="@string/title_activity_splash"
+            android:label="${variant} MoviesApp"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MovieApp.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -29,6 +28,7 @@
             android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MovieApp.NoActionBar">
         </activity>
     </application>

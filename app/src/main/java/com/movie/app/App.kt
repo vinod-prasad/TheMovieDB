@@ -1,7 +1,6 @@
 package com.movie.app
 
 import android.app.Application
-import androidx.viewbinding.BuildConfig
 import timber.log.Timber
 
 class App : Application(){

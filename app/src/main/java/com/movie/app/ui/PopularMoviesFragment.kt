@@ -8,35 +8,34 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
-import com.movie.app.BuildConfig
+import com.movie.app.adapters.PopularMoviesAdapter
 import com.movie.app.apis.RetrofitAPIService
 import com.movie.app.base.MyViewModelFactory
-import com.movie.app.databinding.FragmentMovieDetailsBinding
+import com.movie.app.databinding.FragmentMoviesBinding
 import com.movie.app.repositories.MoviesRepository
-import com.movie.app.util.Constants
-import com.movie.app.viewmodels.MovieDetailsViewModel
+import com.movie.app.viewmodels.PopularMoviesViewModel
 import timber.log.Timber
 
+
 /**
- * A simple [Fragment] subclass as the second destination in the navigation.
+ * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class MovieDetailsFragment : Fragment() {
-    private lateinit var viewModel: MovieDetailsViewModel
-    private var _binding: FragmentMovieDetailsBinding? = null
+class PopularMoviesFragment : Fragment() {
+
+    private lateinit var viewModel: PopularMoviesViewModel
+    private var _binding: FragmentMoviesBinding? = null
+    private lateinit var adapter: PopularMoviesAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-
-        _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentMoviesBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,21 +44,18 @@ class MovieDetailsFragment : Fragment() {
         val retrofitService = RetrofitAPIService.getInstance()
         val mainRepository = MoviesRepository(retrofitService)
 
+        context?.let {
+            adapter = PopularMoviesAdapter(it)
+        }
+
+        binding.recyclerview.adapter = adapter
         viewModel = ViewModelProvider(
             this,
             MyViewModelFactory(mainRepository)
-        ).get(MovieDetailsViewModel::class.java)
+        ).get(PopularMoviesViewModel::class.java)
 
-        viewModel.movieDetails.observe(viewLifecycleOwner, {
-            it.apply {
-                binding.name.text = title
-                binding.overview.text = overview
-                activity?.let {
-                    Glide.with(it)
-                        .load("${BuildConfig.ORIGINAL_IMAGE_URL}${poster_path}")
-                        .into(binding.imageview)
-                }
-            }
+        viewModel.movieList.observe(viewLifecycleOwner, {
+            adapter.submitList(it.results)
         })
 
         viewModel.errorMessage.observe(viewLifecycleOwner, {
@@ -74,11 +70,7 @@ class MovieDetailsFragment : Fragment() {
             }
         })
 
-        var movieId = 580489
-        arguments?.let {
-            movieId = it.getInt(Constants.BUNDLE_KEY_SEL_MOV_ID, movieId)
-            viewModel.getMovieDetailsById(movieId)
-        }
+        viewModel.getAllMovies()
     }
 
     override fun onDestroyView() {
