@@ -54,8 +54,11 @@ class PopularMoviesFragment : Fragment() {
             MyViewModelFactory(mainRepository)
         ).get(PopularMoviesViewModel::class.java)
 
-        viewModel.movieList.observe(viewLifecycleOwner, {
-            adapter.submitList(it.results)
+        viewModel.movieList.observe(viewLifecycleOwner, { response ->
+            var topTenMovies = response.results
+                .sortedBy { it.popularity }
+                .subList(0, 10)
+            adapter.submitList(topTenMovies)
         })
 
         viewModel.errorMessage.observe(viewLifecycleOwner, {
