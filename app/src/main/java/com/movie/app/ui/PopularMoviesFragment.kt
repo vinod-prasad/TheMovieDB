@@ -1,18 +1,23 @@
 package com.movie.app.ui
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.movie.app.R
 import com.movie.app.adapters.PopularMoviesAdapter
 import com.movie.app.apis.RetrofitAPIService
 import com.movie.app.base.MyViewModelFactory
 import com.movie.app.databinding.FragmentMoviesBinding
 import com.movie.app.repositories.MoviesRepository
+import com.movie.app.util.Utility
 import com.movie.app.viewmodels.PopularMoviesViewModel
 import timber.log.Timber
 
@@ -37,6 +42,7 @@ class PopularMoviesFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -69,7 +75,12 @@ class PopularMoviesFragment : Fragment() {
         })
 
         viewModel.errorMessage.observe(viewLifecycleOwner, {
-            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+
+            val networkState = Utility.isOnline(activity as Context)
+            if (!networkState)
+                Toast.makeText(activity, getString(R.string.no_network), Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {

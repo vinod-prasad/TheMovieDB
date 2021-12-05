@@ -15,10 +15,7 @@ import com.movie.app.BuildConfig
 import com.movie.app.R
 import com.movie.app.databinding.MovieListItemBinding
 import com.movie.app.models.PopularMovies
-import com.movie.app.ui.MovieDetailsFragment
-import com.movie.app.ui.MovieDetailsFragmentArgs
 import com.movie.app.ui.PopularMoviesFragmentDirections
-import com.movie.app.util.Constants.BUNDLE_KEY_SEL_MOV_ID
 import timber.log.Timber
 
 /**

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.movie.app.models.PopularMovies
 import com.movie.app.repositories.MoviesRepository
+import com.movie.app.util.Utility
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -12,7 +13,8 @@ class PopularMoviesViewModel constructor(private val moviesRepository: MoviesRep
     val errorMessage = MutableLiveData<String>()
     val movieList = MutableLiveData<PopularMovies>()
     var job: Job? = null
-    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+
         Timber.e("Exception handled: ${throwable.localizedMessage}")
         onError("Exception handled: ${throwable.localizedMessage}")
     }

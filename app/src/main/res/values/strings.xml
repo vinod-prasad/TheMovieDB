@@ -6,4 +6,5 @@
     <string name="movie_details_fragment_label">Movie Details</string>
 
     <string name="the_movie_db">The\nMovie\nDB</string>
+    <string name="no_network">No Network!</string>
 </resources>
