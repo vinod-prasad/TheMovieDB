@@ -22,12 +22,11 @@ import timber.log.Timber
  */
 class PopularMoviesFragment : Fragment() {
 
-    private lateinit var viewModel: PopularMoviesViewModel
     private var _binding: FragmentMoviesBinding? = null
+    private lateinit var viewModel: PopularMoviesViewModel
     private lateinit var adapter: PopularMoviesAdapter
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -55,9 +54,17 @@ class PopularMoviesFragment : Fragment() {
         ).get(PopularMoviesViewModel::class.java)
 
         viewModel.movieList.observe(viewLifecycleOwner, { response ->
+
+            var maxCount = 10 //Max ten movie need to show
+
+            // safe maxCount depends on response if size is less then 10
+            if (response.results.size < maxCount)
+                maxCount = response.results.size
+
+            //Filter top ten movies
             var topTenMovies = response.results
                 .sortedBy { it.popularity }
-                .subList(0, 10)
+                .subList(0, maxCount)
             adapter.submitList(topTenMovies)
         })
 

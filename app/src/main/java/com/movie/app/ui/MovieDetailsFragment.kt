@@ -14,7 +14,6 @@ import com.movie.app.apis.RetrofitAPIService
 import com.movie.app.base.MyViewModelFactory
 import com.movie.app.databinding.FragmentMovieDetailsBinding
 import com.movie.app.repositories.MoviesRepository
-import com.movie.app.util.Constants
 import com.movie.app.viewmodels.MovieDetailsViewModel
 import timber.log.Timber
 
@@ -22,21 +21,22 @@ import timber.log.Timber
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
 class MovieDetailsFragment : Fragment() {
-    private lateinit var viewModel: MovieDetailsViewModel
-    private var _binding: FragmentMovieDetailsBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private lateinit var viewModel: MovieDetailsViewModel
+    private lateinit var movieDetailsCallBack: MovieDetailsCallBack
+    private var _binding: FragmentMovieDetailsBinding? = null
+    private lateinit var args: MovieDetailsFragmentArgs
+
+    // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-
+        movieDetailsCallBack = activity as MovieDetailsCallBack
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,11 +54,7 @@ class MovieDetailsFragment : Fragment() {
             it.apply {
                 binding.name.text = title
                 binding.overview.text = overview
-                activity?.let {
-                    Glide.with(it)
-                        .load("${BuildConfig.ORIGINAL_IMAGE_URL}${poster_path}")
-                        .into(binding.imageview)
-                }
+                movieDetailsCallBack.posterImageUpdate(poster_path)
             }
         })
 
@@ -74,15 +70,29 @@ class MovieDetailsFragment : Fragment() {
             }
         })
 
-        var movieId = 580489
+        //Using SafeArgs Concept
+        val bundle = arguments
+        if (bundle == null) {
+            Timber.e("MovieDetailsFragmentArgs did not received Movie Id")
+            return
+        }
+        val args = MovieDetailsFragmentArgs.fromBundle(bundle)
+        viewModel.getMovieDetailsById(args.movieId)
+
+        //Using bundle Concept
+        /*var movieId = 580489 //Default movie ID
         arguments?.let {
             movieId = it.getInt(Constants.BUNDLE_KEY_SEL_MOV_ID, movieId)
             viewModel.getMovieDetailsById(movieId)
-        }
+        }*/
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    interface MovieDetailsCallBack{
+        fun posterImageUpdate(posterPath:String)
     }
 }

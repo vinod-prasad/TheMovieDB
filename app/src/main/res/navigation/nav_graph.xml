@@ -8,7 +8,7 @@
     <fragment
         android:id="@id/fragPopularMovies"
         android:name="com.movie.app.ui.PopularMoviesFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/popular_movies_fragment_label"
         tools:layout="@layout/fragment_movies">
 
         <action
@@ -18,9 +18,13 @@
     <fragment
         android:id="@id/fragMovieDetails"
         android:name="com.movie.app.ui.MovieDetailsFragment"
-        android:label="@string/second_fragment_label"
+        android:label="@string/movie_details_fragment_label"
         tools:layout="@layout/fragment_movie_details">
 
+        <argument
+            android:name="movieId"
+            app:argType="integer"
+            android:defaultValue="580489" />
         <!--<action
             android:id="@+id/action_DetailsFragment_to_MoviesFragment"
             app:destination="@id/MoviesFragment" />-->

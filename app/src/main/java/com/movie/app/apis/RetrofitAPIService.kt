@@ -13,6 +13,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 
+/**
+ *  API's Interface
+ */
 interface RetrofitAPIService {
 
     @GET("top_rated")
@@ -39,9 +42,9 @@ interface RetrofitAPIService {
                     var request = chain.request()
                     val url: HttpUrl =
                         request.url.newBuilder()
-                            .addQueryParameter("api_key", "5a3706d8cf58850fe3ad58eeee37c1d0")
-                            .addQueryParameter("language", "en-US")
-                            .addQueryParameter("page", "1")
+                            .addQueryParameter("api_key", "5a3706d8cf58850fe3ad58eeee37c1d0") // API-Key
+                            .addQueryParameter("language", "en-US") //Optional
+                            .addQueryParameter("page", "1") //Optional
                             .build()
                     request = request.newBuilder().url(url).build()
                     chain.proceed(request)
@@ -56,7 +59,7 @@ interface RetrofitAPIService {
 
                 val retrofit = Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl(BuildConfig.SERVER_URL)
+                    .baseUrl(BuildConfig.SERVER_URL) // Base URL form Gradle Config
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
 

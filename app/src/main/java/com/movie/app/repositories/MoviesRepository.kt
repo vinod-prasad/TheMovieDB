@@ -2,6 +2,9 @@ package com.movie.app.repositories
 
 import com.movie.app.apis.RetrofitAPIService
 
+/**
+ * Movies API Repository
+ */
 class MoviesRepository constructor(private val retrofitAPIService: RetrofitAPIService) {
 
     suspend fun getPopularMovies() = retrofitAPIService.getPopularMovies()

@@ -6,6 +6,9 @@ import com.movie.app.repositories.MoviesRepository
 import com.movie.app.viewmodels.MovieDetailsViewModel
 import com.movie.app.viewmodels.PopularMoviesViewModel
 
+/**
+ * Custom ViewModel Factory
+ */
 class MyViewModelFactory constructor(private val repository: MoviesRepository) :
     ViewModelProvider.Factory {
 

@@ -1,7 +1,6 @@
 package com.movie.app.ui
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,8 +14,14 @@ import androidx.navigation.NavController
 import com.google.android.material.appbar.AppBarLayout
 import com.movie.app.R
 import com.movie.app.databinding.ActivityMainBinding
+import timber.log.Timber
+import com.bumptech.glide.Glide
+import com.movie.app.BuildConfig
+import kotlin.math.abs
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), MovieDetailsFragment.MovieDetailsCallBack {
+
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var screenName: String
@@ -29,16 +34,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        binding.toolbar.visibility = View.GONE
-
         navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+        // We can use "CollapsingToolbarLayout" for better user's Visual Experience
+        appBarLayoutConfigOnSwipe()
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
     }
 
@@ -73,47 +75,74 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+    /**
+     * Fragment Change Listener
+     */
     private val listener =
-        NavController.OnDestinationChangedListener { controller, destination, arguments ->
-//            Timber.e("===> ${destination.id} : ${destination.label}")
+        NavController.OnDestinationChangedListener { _, destination, _ ->
+            Timber.d("==> OnDestinationChangedListener:: ${destination.id} : ${destination.label}")
             appBarLayoutConfigOnFragmentLaunch(destination.id)
         }
 
+    /**
+     * Event trigger when fragment/destination changes
+     */
     private fun appBarLayoutConfigOnFragmentLaunch(fragId: Int) {
 
         when (fragId) {
             R.id.fragPopularMovies -> {
-                screenName = getString(R.string.app_name)
-                binding.appBarLayout.setExpanded(true, true)
+                binding.collapsingToolbarLayout.visibility = View.GONE
+                binding.appBarLayout.setExpanded(false, true)
+                screenName = getString(R.string.popular_movies_fragment_label)
+                clearPosterImage()
             }
             R.id.fragMovieDetails -> {
-                screenName = getString(R.string.app_name)
-                binding.appBarLayout.setExpanded(false, true)
+                binding.collapsingToolbarLayout.visibility = View.VISIBLE
+                binding.appBarLayout.setExpanded(true, true)
+                screenName = getString(R.string.movie_details_fragment_label)
             }
         }
     }
 
-    /*private fun appBarLayoutConfigOnSwipe() {
+    /**
+     *  We can handle toolbarTitle and visibility on state change of
+     *  CollapsingToolbarLayout from Collapsed to Expanded and vise versa
+     */
+    private fun appBarLayoutConfigOnSwipe() {
         binding.appBarLayout.addOnOffsetChangedListener(
             AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-                if (Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
+                if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                     //  Collapsed
-                    //                Log.w(TAG, "onOffsetChanged: ======Collapsed======" + verticalOffset);
+                    Timber.d("onOffsetChanged: ======Collapsed======$verticalOffset");
                     appBarLayout.setBackgroundResource(R.color.appBarLayout_background)
                     binding.toolbar.setBackgroundResource(R.color.colorPrimary)
                     binding.toolbar.visibility = View.VISIBLE
-                    binding.toolbarTitle.setText(screenName)
-                    binding.toolbarTitle.setTextColor(ContextCompat.getColor(this, R.color.White))
+                    binding.toolbarTitle.text = screenName
+                    binding.toolbarTitle.setTextColor(ContextCompat.getColor(this, R.color.white))
                 } else {
                     //Expanded
-                    //                Log.d(TAG, "onOffsetChanged: ======Expanded======" + verticalOffset);
+                    Timber.d("onOffsetChanged: ======Expanded======$verticalOffset");
                     appBarLayout.setBackgroundResource(R.color.appBarLayout_background)
-                    toolbar.setBackgroundResource(R.color.colorPrimary)
-                    toolbarTitle.setText(R.string.app_name_translation)
-                    toolbar.visibility = View.VISIBLE
-                    toolbarTitle.setTextColor(ContextCompat.getColor(this, R.color.White))
+                    binding.toolbar.setBackgroundResource(R.color.colorPrimary)
+                    binding.toolbar.visibility = View.VISIBLE
+                    binding.toolbarTitle.text = screenName
+                    binding.toolbarTitle.setTextColor(ContextCompat.getColor(this, R.color.white))
                 }
             }
         )
-    }*/
+    }
+
+    override fun posterImageUpdate(posterPath: String) {
+        loadPosterImage(posterPath)
+    }
+
+    private fun loadPosterImage(posterPath:String){
+        Glide.with(binding.commonImageview.context)
+            .load("${BuildConfig.ORIGINAL_IMAGE_URL}${posterPath}")
+            .into(binding.commonImageview)
+    }
+    private fun clearPosterImage(){
+        binding.commonImageview.setImageResource(android.R.color.transparent)
+    }
 }
