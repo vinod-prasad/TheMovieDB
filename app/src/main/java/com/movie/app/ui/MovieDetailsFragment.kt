@@ -11,8 +11,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
-import com.movie.app.BuildConfig
 import com.movie.app.R
 import com.movie.app.apis.RetrofitAPIService
 import com.movie.app.base.MyViewModelFactory
@@ -23,14 +21,13 @@ import com.movie.app.viewmodels.MovieDetailsViewModel
 import timber.log.Timber
 
 /**
- * A simple [Fragment] subclass as the second destination in the navigation.
+ * This fragment is used to show the details about the selected movie form the popular movies list.
  */
 class MovieDetailsFragment : Fragment() {
 
     private lateinit var viewModel: MovieDetailsViewModel
     private lateinit var movieDetailsCallBack: MovieDetailsCallBack
     private var _binding: FragmentMovieDetailsBinding? = null
-    private lateinit var args: MovieDetailsFragmentArgs
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
@@ -49,11 +46,11 @@ class MovieDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val retrofitService = RetrofitAPIService.getInstance()
-        val mainRepository = MoviesRepository(retrofitService)
+        val moviesRepository = MoviesRepository(retrofitService)
 
         viewModel = ViewModelProvider(
             this,
-            MyViewModelFactory(mainRepository)
+            MyViewModelFactory(moviesRepository)
         ).get(MovieDetailsViewModel::class.java)
 
         viewModel.movieDetails.observe(viewLifecycleOwner, {
@@ -68,9 +65,9 @@ class MovieDetailsFragment : Fragment() {
 
             val networkState = Utility.isOnline(activity as Context)
             if (!networkState)
-                Toast.makeText(activity, getString(R.string.no_network), Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.no_network), Toast.LENGTH_LONG).show()
             else
-                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
@@ -103,6 +100,9 @@ class MovieDetailsFragment : Fragment() {
         _binding = null
     }
 
+    /**
+     * Callback interface to send information form fragment to host activity
+     */
     interface MovieDetailsCallBack {
         fun posterImageUpdate(posterPath: String)
     }

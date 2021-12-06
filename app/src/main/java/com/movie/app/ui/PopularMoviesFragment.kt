@@ -23,7 +23,7 @@ import timber.log.Timber
 
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
+ * The fragment is used to list the Top 10 popular movies and the default destination in the navigation.
  */
 class PopularMoviesFragment : Fragment() {
 
@@ -47,7 +47,7 @@ class PopularMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val retrofitService = RetrofitAPIService.getInstance()
-        val mainRepository = MoviesRepository(retrofitService)
+        val moviesRepository = MoviesRepository(retrofitService)
 
         context?.let {
             adapter = PopularMoviesAdapter(it)
@@ -56,7 +56,7 @@ class PopularMoviesFragment : Fragment() {
         binding.recyclerview.adapter = adapter
         viewModel = ViewModelProvider(
             this,
-            MyViewModelFactory(mainRepository)
+            MyViewModelFactory(moviesRepository)
         ).get(PopularMoviesViewModel::class.java)
 
         viewModel.movieList.observe(viewLifecycleOwner, { response ->
@@ -78,9 +78,9 @@ class PopularMoviesFragment : Fragment() {
 
             val networkState = Utility.isOnline(activity as Context)
             if (!networkState)
-                Toast.makeText(activity, getString(R.string.no_network), Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.no_network), Toast.LENGTH_LONG).show()
             else
-                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {

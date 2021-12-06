@@ -26,6 +26,10 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
+
+    /**
+     * launch the app host activity.
+     */
     private suspend fun moveToHomeScreen() {
         delay(3000L)
         finish()

@@ -7,6 +7,8 @@ class App : Application(){
 
     override fun onCreate() {
         super.onCreate()
+
+        //Logger
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }

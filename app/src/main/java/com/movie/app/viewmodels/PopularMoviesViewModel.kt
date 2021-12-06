@@ -8,6 +8,9 @@ import com.movie.app.util.Utility
 import kotlinx.coroutines.*
 import timber.log.Timber
 
+/**
+ * ViewModel
+ */
 class PopularMoviesViewModel constructor(private val moviesRepository: MoviesRepository): ViewModel() {
 
     val errorMessage = MutableLiveData<String>()

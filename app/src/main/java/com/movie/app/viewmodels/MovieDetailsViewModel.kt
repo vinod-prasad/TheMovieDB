@@ -7,6 +7,9 @@ import com.movie.app.models.PopularMovies
 import com.movie.app.repositories.MoviesRepository
 import kotlinx.coroutines.*
 
+/**
+ * ViewModel
+ */
 class MovieDetailsViewModel constructor(private val moviesRepository: MoviesRepository): ViewModel() {
 
     val errorMessage = MutableLiveData<String>()

@@ -19,7 +19,7 @@ import com.movie.app.ui.PopularMoviesFragmentDirections
 import timber.log.Timber
 
 /**
- * We have used ListAdaptor to show the transition when item will be added or removed from list
+ * We have used ListAdaptor.
  */
 class PopularMoviesAdapter(private val context: Context) :
     ListAdapter<PopularMovies.Result, PopularMoviesAdapter.ViewHolder>(DiffCallBack()) {

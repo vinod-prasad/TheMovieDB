@@ -7,8 +7,16 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 
+/**
+ * App Utility class
+ */
 object Utility {
 
+    /**
+     * Check the network connectivity status of device/phone.
+     *  status: true - Connected
+     *  Status: false - Not connected
+     */
     @RequiresApi(Build.VERSION_CODES.M)
     fun isOnline(context: Context): Boolean {
         val connectivityManager =

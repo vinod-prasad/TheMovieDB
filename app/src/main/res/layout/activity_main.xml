@@ -2,16 +2,15 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rootview"
     tools:context=".ui.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f00"
         android:theme="@style/Theme.MovieApp.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -33,12 +32,22 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/common_imageview"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:scaleType="center"
+                    android:layout_height="@dimen/movie_banner_height"
+                    android:scaleType="matrix"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:background="@tools:sample/backgrounds/scenic" />
+
+                <ProgressBar
+                    android:id="@+id/progressDialog"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:indeterminateTint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@id/common_imageview"
+                    app:layout_constraintEnd_toEndOf="@id/common_imageview"
+                    app:layout_constraintStart_toStartOf="@id/common_imageview"
+                    app:layout_constraintTop_toTopOf="@id/common_imageview" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.Toolbar

@@ -7,4 +7,5 @@
 
     <string name="the_movie_db">The\nMovie\nDB</string>
     <string name="no_network">No Network!</string>
+    <string name="unable_to_load_img">Unable to load image.</string>
 </resources>
