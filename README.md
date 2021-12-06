@@ -28,6 +28,11 @@ This application is sample project which contains Android Application developmen
 	(c) Defining Config in gradle
 					
 
+# Screenshots:-
+![Screenshot_20211206-211715](https://user-images.githubusercontent.com/80372765/144889443-b7d95fe9-4fdc-482e-b232-dd1d133f46f5.jpg)
+![Screenshot_20211206-211733](https://user-images.githubusercontent.com/80372765/144889773-dcbc1df5-d908-410f-95f4-60cc6dff321d.jpg)
+![Screenshot_20211206-211744](https://user-images.githubusercontent.com/80372765/144889811-73f2ad1f-75fb-4b0a-bb23-e38e4ff2bf16.jpg)
+
 
 
 
